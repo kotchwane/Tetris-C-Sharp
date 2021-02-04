@@ -41,7 +41,83 @@ namespace Source
 				".TT.\n" +
 				".T..\n"
 			);
+		public static readonly Tetromino L_SHAPE = new Tetromino(
+				"....\n" +
+				"LLL.\n" +
+				"L...\n"
+			,
+				"LL..\n" +
+				".L..\n" +
+				".L..\n"
+				,
+				"....\n" +
+				"..L.\n" +
+				"LLL.\n",
 
+				".L..\n" +
+				".L..\n" +
+				".LL.\n"
+			
+			);
+
+		public static readonly Tetromino I_SHAPE = new Tetromino(
+		"....\n" +
+		"IIII\n" +
+		"....\n" +
+		"....\n"
+	,
+		"..I.\n" +
+		"..I.\n" +
+		"..I.\n" +
+		"..I.\n"
+
+	);
+
+
+		public static readonly Tetromino J_SHAPE = new Tetromino(
+				"....\n" +
+				"JJJ.\n" +
+				"..J.\n"
+			,
+				".J..\n" +
+				".J..\n" +
+				"JJ..\n"
+			,
+				"....\n" +
+				"J...\n" +
+				"JJJ.\n"
+			,
+				".JJ.\n" +
+				".J..\n" +
+				".J..\n"
+			);
+
+		public static readonly Tetromino S_SHAPE = new Tetromino(
+			"....\n" +
+			".SS.\n" +
+			"SS..\n"
+		,
+			"S...\n" +
+			"SS..\n" +
+			".S..\n"
+
+		);
+
+		public static readonly Tetromino Z_SHAPE = new Tetromino(
+		"....\n" +
+		"ZZ..\n" +
+		".ZZ..\n"
+	,
+		"..Z.\n" +
+		".ZZ.\n" +
+		".Z..\n"
+	);
+		public static readonly Tetromino O_SHAPE = new Tetromino(
+		".OO.\n" +
+		".OO.\n" 
+	
+
+	);
 
 		public Tetromino(params string[] list) {
 			this.list = list;

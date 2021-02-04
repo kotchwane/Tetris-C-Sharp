@@ -8,8 +8,8 @@ namespace Source
 {
     public class Board:Grid
     {
-        readonly int rows;
-        readonly int columns;
+        int rows;
+        int columns;
         char[,] board;
         private MovableGrid fallingBlock = null;
 
@@ -129,7 +129,7 @@ namespace Source
         }
 
 
-        void MoveDown() {
+        public void MoveDown() {
             if (!IsFallingBlock()) return;
             MovableGrid test = fallingBlock.MoveDown();
             if (ConflictsWithBoard(test)) {
@@ -152,25 +152,25 @@ namespace Source
         }
 
 
-        void MoveLeft() {
+        public void MoveLeft() {
             if (!IsFallingBlock())
                 return;
             TryMove(fallingBlock.MoveLeft());
         }
 
-        void MoveRight() {
+        public void MoveRight() {
             if (!IsFallingBlock())
                 return;
             TryMove(fallingBlock.MoveRight());
         }
 
-        void RotateLeft() {
+        public void RotateLeft() {
             if (!IsFallingBlock())
                 return;
             TryRotate(fallingBlock.RotateLeft());
         }
 
-        void RotateRight() {
+        public void RotateRight() {
             if (!IsFallingBlock())
                 return;
             TryRotate(fallingBlock.RotateRight());
@@ -185,6 +185,14 @@ namespace Source
 
         public char CellAt(int row, int col) {
             return board[row, col];
+        }
+
+        public void FromString(string s) {
+            StringToMatrix converter = new StringToMatrix(s);
+            board = converter.blocks;
+            rows = converter.rows;
+            columns = converter.columns;
+
         }
 
         
