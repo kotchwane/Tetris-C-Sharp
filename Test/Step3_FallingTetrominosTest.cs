@@ -26,7 +26,7 @@ namespace Test
             string grid = "...\n...\n...\n";
             Piece p = new Piece(grid);
 
-            CollectionAssert.AreEqual(p.matrix, new char[,] {
+            CollectionAssert.AreEqual(p.blocks, new char[,] {
                 {'.','.','.'},
                 {'.','.','.'},
                 {'.','.','.'}

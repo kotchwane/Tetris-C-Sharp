@@ -10,37 +10,27 @@ namespace Source
     {
         readonly int rows;
         readonly int columns;
-
+        char[,] board;
         private MovableGrid fallingBlock = null;
-        int r, c; // coordinates of falling block
-        char[,] array;
+
+        public static readonly char EMPTY = '\0';
 
         public Board(int rows, int columns)
         {
             this.rows = rows;
             this.columns = columns;
-            this.array = new char[rows, columns];
+            this.board = new char[rows, columns];
 
-            for (int row = 0; row < rows; row++) {
-                for (int col = 0; col < columns; col++) {
-                    array[row, col] = '.';
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < columns; c++) {
+                    board[r, c] = EMPTY;
                 }
             }
+
         }
 
-        public override String ToString()
-        {
-            String s = "";
-            for (int row = 0; row < rows; row++)
-            {
-                for (int col = 0; col < columns; col++)
-                {
-                    s += array[row, col];
-             
-                }
-                s += "\n";
-            }
-            return s;
+        public override String ToString() {
+            return StringToMatrix.Inverse(board, Rows(), Columns());
         }
 
         public bool IsFallingBlock() {
@@ -53,26 +43,128 @@ namespace Source
         }
         public void Drop(Tetromino drop) {
             CheckIfFalling();
-            fallingBlock = new MovableGrid(drop, this);
-            int startRow = 0, startCol = columns / 2;
-            r = startRow;
-            c = startCol;
-            array[r,c] = drop.CellAt(0,0);
-        
+            int r = StartingRowOffset(drop);
+            fallingBlock = new MovableGrid(drop, this).MoveTo(r, Columns()/2 - drop.Columns()/2);
         }
+
+        static int StartingRowOffset(Grid shape) {
+            for (int r = 0; r < shape.Rows(); r++) {
+                for (int c = 0; c < shape.Columns(); c++) {
+                    if (shape.CellAt(r, c) != EMPTY)
+                        return -r;
+                }
+            }
+            return 0;
+        } 
+      
 
         public void Tick() {
-            if (fallingBlock == null) return;
-      
-            if (r == rows - 1 || array[r + 1, c] != '.') {
-                fallingBlock = null;
-                return;
+            MoveDown();
+        }
+
+        bool ConflictsWithBoard(MovableGrid block) {
+            return block.OutsideBoard() || block.HitsAnotherBlock();
+        }
+
+        void StopFallingBlock() {
+            CopyToBoard(fallingBlock);
+            fallingBlock = null;
+        }
+
+        void CopyToBoard(MovableGrid block) {
+            for (int r = 0; r < Rows(); r ++) {
+                for (int c = 0; c < Columns(); c++) {
+                    if (block.IsAt(r, c))
+                        board[r, c] = block.CellAt(r, c);
+                }
             }
 
-            array[r, c] = '.';
-            array[r + 1, c] = fallingBlock.CellAt(0, 0);
-            r++;
         }
+
+
+        void RemoveFullRows() {
+            RemoveRows(FindFullRows());
+        }
+        void RemoveRows(List<int> rows) {
+            foreach (int idx in rows) {
+                RemoveRow(idx);
+            }
+        }
+
+        void RemoveRow(int idx) { // Or SqueezeRow()
+            for (int row = idx - 1; row >= 0; row --) {
+                for (int col = 0; col < Columns(); col++) {
+                    board[row + 1, col] = board[row, col];
+                }
+            }
+
+        }
+
+        List<int> FindFullRows() {
+            List<int> fullRows = new List<int>();
+            for (int row = 0; row < Rows(); row++) {
+                if (RowIsFull(row))
+                    fullRows.Add(row);
+            }
+            return fullRows;
+        }
+
+        bool RowIsFull(int rowIndex) {
+            for (int col = 0; col < Columns(); col++) {
+                if (board[rowIndex, col] == EMPTY)
+                    return false;
+            }
+            return true;
+        }
+
+
+        void MoveDown() {
+            if (!IsFallingBlock()) return;
+            MovableGrid test = fallingBlock.MoveDown();
+            if (ConflictsWithBoard(test)) {
+                StopFallingBlock();
+                RemoveFullRows();
+            }
+            else {
+                fallingBlock = test;
+            }
+        }
+
+        void TryMove(MovableGrid new_grid) {
+            if (!ConflictsWithBoard(new_grid))
+                fallingBlock = new_grid;
+
+        }
+
+        void TryRotate(MovableGrid rotated_grid) {
+            TryMove(rotated_grid);
+        }
+
+
+        void MoveLeft() {
+            if (!IsFallingBlock())
+                return;
+            TryMove(fallingBlock.MoveLeft());
+        }
+
+        void MoveRight() {
+            if (!IsFallingBlock())
+                return;
+            TryMove(fallingBlock.MoveRight());
+        }
+
+        void RotateLeft() {
+            if (!IsFallingBlock())
+                return;
+            TryRotate(fallingBlock.RotateLeft());
+        }
+
+        void RotateRight() {
+            if (!IsFallingBlock())
+                return;
+            TryRotate(fallingBlock.RotateRight());
+        }
+
         public int Rows() {
             return rows;
         }
@@ -81,8 +173,10 @@ namespace Source
         }
 
         public char CellAt(int row, int col) {
-            return array[row, col];
+            return board[row, col];
         }
+
+        
 
 
     }

@@ -12,16 +12,16 @@ namespace Source
 
 		// TODO : Get rid of list, keeping only listOfPieces?
 		private string[] list;
-		private Piece[] listOfPieces;
+		private readonly Piece[] orientation;
 		public int Rows() {
-			return listOfPieces[0].Rows();
+			return orientation[0].Rows();
 		}
 		public int Columns() {
-			return listOfPieces[0].Columns();
+			return orientation[0].Columns();
 		}
 
 		public char CellAt(int row, int col) {
-			return listOfPieces[0].CellAt(row, col);
+			return orientation[0].CellAt(row, col);
 		}
 
 		public static readonly Tetromino T_SHAPE = new Tetromino(
@@ -45,9 +45,9 @@ namespace Source
 
 		public Tetromino(params string[] list) {
 			this.list = list;
-			this.listOfPieces = new Piece[list.Length];
+			this.orientation = new Piece[list.Length];
 			for (int i = 0; i < list.Length; i++) {
-				listOfPieces[i] = new Piece(list[i]);
+				orientation[i] = new Piece(list[i]);
 			}
 
 		}

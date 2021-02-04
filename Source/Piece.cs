@@ -5,26 +5,28 @@ namespace Source
 	public class Piece : Grid
 	{
 		// TODO : public or not?
-		public char[,] matrix;
+		int rows, columns;
+		public char[,] blocks;
+
 		public Piece(string s) { // convert a "...\n...\n...\n" string into a matrix
-			string[] subs = s.Split('\n');
-			int Nrows = subs.Length - 1; // because the string finishes with \n, so split finishes with an empty []
-			matrix = new char[Nrows, subs[0].Length];
-			for (int row = 0; row < Nrows; row++) {
-				for (int col = 0; col < subs[0].Length; col++) {
-					matrix[row, col] = subs[row][col];
-				}
-			}
+			StringToMatrix s2m = new StringToMatrix(s);
+			blocks = s2m.blocks;
+			rows = s2m.rows;
+			columns = s2m.columns;
 		}
 
 		public int Rows() {
-			return matrix.GetLength(0);
+			return rows;
         }
 		public int Columns() {
-			return matrix.GetLength(1);
+			return columns;
         }
 		public char CellAt(int row, int col) {
-			return matrix[row, col];
+			return blocks[row, col];
         }
-	}
+
+        public override string ToString() {
+			return StringToMatrix.Inverse(blocks, Rows(), Columns());
+        }
+    }
 }
