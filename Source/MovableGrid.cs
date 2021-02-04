@@ -17,11 +17,11 @@ namespace Source
 
 		public MovableGrid(Tetromino inner, Board board) : this(0, 0, inner, board) { }
 
-		public MovableGrid(int outer_row, int outer_col, Tetromino inner, Board board) {
+		private MovableGrid(int outer_row, int outer_col, Tetromino inner, Board board) {
 			this.inner = inner;
 			this.board = board;
-			this.row = -Rows() + 1;
-			this.col = (board.Columns() - Columns()) / 2;
+			this.row = outer_row;
+			this.col = outer_col;
 		}
 
 		public int Rows() {
@@ -53,13 +53,14 @@ namespace Source
 			return inner.CellAt(inner_row, inner_col);
         }
 
-		// TODO 0
+
 		public bool IsAt(int outer_row, int outer_col) {
 			int inner_row = ToInnerRow(outer_row);
-			int inner_col = ToOuterCol(outer_col);
+			int inner_col = ToInnerCol(outer_col);
 			return inner_row >= 0
 				&& inner_row < inner.Rows()
 				&& inner_col >= 0
+				&& inner_col < inner.Columns()
 				&& inner.CellAt(inner_row, inner_col) != Board.EMPTY;
         }
 
@@ -89,7 +90,6 @@ namespace Source
 
 
 		public bool OutsideBoard() {
-		
 
 			for (int r = 0; r < Rows(); r++) {
 				for (int c = 0; c < Columns(); c++) {
@@ -97,7 +97,7 @@ namespace Source
 					if (inner.CellAt(r,c) != Board.EMPTY) {
 						int outer_row = ToOuterRow(r);
 						int outer_col = ToOuterCol(c);
-						if (outer_col < 0 || outer_col > board.Columns() || outer_row < 0 || outer_row > board.Rows())
+						if (outer_col < 0 || outer_col >= board.Columns() || outer_row < 0 || outer_row >= board.Rows())
 							return true;
                     }
                 }

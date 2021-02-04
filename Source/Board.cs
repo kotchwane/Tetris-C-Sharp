@@ -13,7 +13,7 @@ namespace Source
         char[,] board;
         private MovableGrid fallingBlock = null;
 
-        public static readonly char EMPTY = '\0';
+        public static readonly char EMPTY = '.';
 
         public Board(int rows, int columns)
         {
@@ -30,7 +30,18 @@ namespace Source
         }
 
         public override String ToString() {
-            return StringToMatrix.Inverse(board, Rows(), Columns());
+            char[,] curr_board = new char[Rows(), Columns()];
+            for (int r = 0; r < Rows(); r++) {
+                for (int c = 0; c < Columns(); c++) {
+                    if ((fallingBlock is object) && fallingBlock.IsAt(r, c))
+                        curr_board[r, c] = fallingBlock.CellAt(r, c);
+                    else
+                        curr_board[r, c] = board[r, c];
+
+                }
+            }
+
+            return StringToMatrix.Inverse(curr_board, Rows(), Columns());
         }
 
         public bool IsFallingBlock() {
