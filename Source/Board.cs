@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Source
 {
+
+    [System.Diagnostics.DebuggerDisplay("{ToString()}")]
     public class Board:Grid
     {
         int rows;
@@ -147,8 +149,21 @@ namespace Source
 
         }
 
-        void TryRotate(MovableGrid rotated_grid) {
-            TryMove(rotated_grid);
+
+        void TryRotate(MovableGrid rotated) {
+            MovableGrid[] moves = {
+            rotated ,
+            rotated.MoveLeft() , // wallkick moves
+            rotated.MoveRight() ,
+            rotated.MoveLeft().MoveLeft() ,
+            rotated.MoveRight().MoveRight() ,
+            };
+            foreach (MovableGrid test in moves) {
+                if (!ConflictsWithBoard(test)) {
+                    fallingBlock = test;
+                    return;
+                }
+            }
         }
 
 

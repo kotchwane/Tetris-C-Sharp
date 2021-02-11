@@ -97,8 +97,12 @@ namespace Source
 					if (inner.CellAt(r,c) != Board.EMPTY) {
 						int outer_row = ToOuterRow(r);
 						int outer_col = ToOuterCol(c);
-						if (outer_col < 0 || outer_col >= board.Columns() || outer_row < 0 || outer_row >= board.Rows())
+						if (outer_col < 0 || outer_col >= board.Columns() || outer_row < 0 || outer_row >= board.Rows()) {
+							if (outer_col >= board.Columns())
+								Console.WriteLine("outer_col> board.columns()");
 							return true;
+						}
+							
                     }
                 }
             }

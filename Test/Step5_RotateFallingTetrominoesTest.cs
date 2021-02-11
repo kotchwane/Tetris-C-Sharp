@@ -240,6 +240,7 @@ namespace Test
             board.Drop(Tetromino.T_SHAPE);
             board.MoveDown();
             board.RotateRight();
+            board.ToString();
             board.MoveRight();
             board.MoveRight();
             board.MoveRight();

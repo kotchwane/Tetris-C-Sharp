@@ -56,6 +56,7 @@
     <Compile Include="Step3_FallingTetrominosTest.cs" />
     <Compile Include="Step4_MoveFallingTetrominoesTest.cs" />
     <Compile Include="Step5_RotateFallingTetrominoesTest.cs" />
+    <Compile Include="Step6_Removing_a_row.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Source\Source.csproj">
